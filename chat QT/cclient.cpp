@@ -4,23 +4,26 @@ cClient::cClient(QObject *parent) : QObject(parent),
     m_port(10000),m_IP("127.0.0.1"),recievedCounter(0),userName("Shakkozu")
 {
      m_timerId = startTimer(2000);
-    //connect2Server();
 
-    //sendMessage("siema");
-   // getMessagesCount();
-   // qDebug() <<getMessage(0);
 }
 
 void cClient::sendMessage(QString message)
 {
     QByteArray inBytes;
-     connect2Server();
-    sDatagram inp;
-    inBytes = message.toUtf8();
-    strcpy(inp.tab,inBytes.constData());
-    inp.cmdID=1;
-    m_socket.write((char*)&inp,sizeof(inp));
-    Disconnect();
+    // if(connect2Server())
+    // {
+         inBytes = message.toUtf8();
+         m_socket.write(inBytes.constData());
+        // Disconnect();
+     //}
+    //sDatagram inp;
+   // inBytes = message.toUtf8();
+    //strcpy(inp.tab,inBytes.constData());
+   //inp.cmdID=1;
+   // m_socket.write((char*)&inp,sizeof(inp));
+   // m_socket.write(inBytes.constData());
+   // m_socket.write(inBytes.constData(),sizeof(inBytes));
+   // Disconnect();
 
 }
 
@@ -97,7 +100,7 @@ void cClient::check()
     for(int id = recievedCounter+1; id<N; id++)
     {
         QString msg = getMessage(id);
-        emit newMessageReceived(msg); // wysyla sygnal
+        emit newMessageReceived(msg); // emits signal
         recievedCounter=id;
 
     }

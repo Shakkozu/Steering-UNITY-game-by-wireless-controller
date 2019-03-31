@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "cclient.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,10 +18,10 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_sendButton_released()
+/*void MainWindow::on_sendButton_released()
 {
     QString str = ui->lineMsg->text();
-    if(str == "\\total")
+    if(str == "\\total") // to check number of all messages send
     {
        ui->ChatText->addItem("Total number of messages send: " + QString::number(client.getMessagesCount()));
     }
@@ -27,7 +29,8 @@ void MainWindow::on_sendButton_released()
     ui->ChatText->addItem(client.userName+":"+ui->lineMsg->text());
     client.sendMessage(str);
     ui->lineMsg->setText("");
-}
+
+}*/
 void MainWindow::ShowDialog()
 {
     SettingsDlg dialog;
@@ -49,9 +52,78 @@ void MainWindow::newData(QString text)
     ui->ChatText->addItem(text);
 }
 
-void MainWindow::on_downloadButton_released()
+/*void MainWindow::on_downloadButton_released()
 {
     int id = ui->lineID->text().toInt();
     ui->ChatText->addItem("Server: "+client.getMessage(id));
     ui->lineID->setText("");
+}*/
+
+
+
+
+
+void MainWindow::on_UpButton_pressed()
+{
+    QString str = "Move_Up!";
+    client.sendMessage(str);
+}
+
+void MainWindow::on_RightButton_pressed()
+{
+    QString str = "Move_Right!";
+    client.sendMessage(str);
+}
+
+
+void MainWindow::on_DownButton_pressed()
+{
+    QString str = "Move_Down!";
+    client.sendMessage(str);
+}
+
+void MainWindow::on_LeftButton_pressed()
+{
+    QString str = "Move_Left!";
+    client.sendMessage(str);
+}
+void MainWindow::on_RightButton_released()
+{
+    QString str = "Reset";
+    client.sendMessage(str);
+}
+void MainWindow::on_DownButton_released()
+{
+    QString str = "Reset";
+    client.sendMessage(str);
+}
+void MainWindow::on_LeftButton_released()
+{
+    QString str = "Reset";
+    client.sendMessage(str);
+}
+void MainWindow::on_UpButton_released()
+{
+    QString str = "Reset";
+    client.sendMessage(str);
+   // client.sendMessage(str);
+}
+
+
+void MainWindow::on_DisconnectButton_clicked()
+{
+    client.Disconnect();
+    ui->ChatText->addItem("Disconnected From Server");
+}
+void MainWindow::on_ConnectButton_clicked()
+{
+    if(client.connect2Server())
+    {
+        ui->ChatText->addItem("Connected to server  IP:"
+            + client.GetIp()+" PORT:" +QString::number(client.GetPort()));
+    }
+    else
+    {
+        ui->ChatText->addItem("Connection Failed");
+    }
 }

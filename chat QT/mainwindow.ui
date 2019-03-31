@@ -15,20 +15,14 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
-     <widget class="QPushButton" name="sendButton">
+    <item row="9" column="3">
+     <widget class="QPushButton" name="DisconnectButton">
       <property name="text">
-       <string>Wyslij</string>
-      </property>
-      <property name="shortcut">
-       <string>Return</string>
+       <string>Disconnect</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="2">
-     <widget class="QLineEdit" name="lineMsg"/>
-    </item>
-    <item row="0" column="0" colspan="3">
+    <item row="8" column="0" colspan="4">
      <widget class="QListWidget" name="ChatText">
       <property name="enabled">
        <bool>true</bool>
@@ -41,13 +35,53 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="2">
-     <widget class="QLineEdit" name="lineID"/>
-    </item>
-    <item row="2" column="0">
-     <widget class="QPushButton" name="downloadButton">
+    <item row="5" column="1" colspan="2">
+     <widget class="QPushButton" name="DownButton">
       <property name="text">
-       <string>Pobierz</string>
+       <string>Down</string>
+      </property>
+      <property name="shortcut">
+       <string>Down</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="2">
+     <widget class="QPushButton" name="UpButton">
+      <property name="text">
+       <string>Up</string>
+      </property>
+      <property name="shortcut">
+       <string>Up</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0">
+     <widget class="QPushButton" name="ConnectButton">
+      <property name="text">
+       <string>Connect</string>
+      </property>
+      <property name="shortcut">
+       <string>Return</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0" colspan="2">
+     <widget class="QPushButton" name="LeftButton">
+      <property name="text">
+       <string>Left</string>
+      </property>
+      <property name="shortcut">
+       <string>Left</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2" colspan="2">
+     <widget class="QPushButton" name="RightButton">
+      <property name="text">
+       <string>Right</string>
+      </property>
+      <property name="shortcut">
+       <string>Right</string>
       </property>
      </widget>
     </item>

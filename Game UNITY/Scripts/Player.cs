@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -10,17 +9,23 @@ public class Player : MonoBehaviour
     [SerializeField] float padding; //TODO REMOVE
     [SerializeField] GameObject laserPrefab;
     [SerializeField] float projectileSpeed = 10f;
+    
+
   //  [SerializeField] Int32 port = 7777;
+
 
     float xMin;
     float xMax;
     float yMin;
     float yMax;
-    
+
+    float moveX = 0f, moveY = 0f;
+    TCPServeR server;
 
     // Start is called before the first frame update
     void Start()
     {
+        server = FindObjectOfType<TCPServeR>();
         SetUpMoveBoundaries();
         StartCoroutine(PrintAndWait());
     }
@@ -53,8 +58,9 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        var deltaX = Input.GetAxis("Horizontal") * Time.deltaTime * moveSpeed; //now move ratio is independent from frames per second on user's computer
-        var deltaY = Input.GetAxis("Vertical") * Time.deltaTime * moveSpeed;
+        AddMoveInitiators();
+        var deltaX = (Input.GetAxis("Horizontal") + moveX)* Time.deltaTime * moveSpeed; //now move ratio is independent from frames per second on user's computer
+        var deltaY = (Input.GetAxis("Vertical") +moveY)* Time.deltaTime * moveSpeed;
 
         var newXPos = Mathf.Clamp(transform.position.x + deltaX,xMin+padding,xMax-padding);
         var newYPos = Mathf.Clamp(transform.position.y + deltaY,yMin+.5f,yMax/6);
@@ -69,5 +75,30 @@ public class Player : MonoBehaviour
         yMin = gameCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).y;
         yMax = gameCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y;
     }
-
+    private void AddMoveInitiators()
+    {
+        string str = server.GetCurrentMessage();
+        //Debug.Log(str);
+        if(str == "Move_Up!")
+        {
+            moveY = 1f;
+        }
+        else if(str =="Move_Down!")
+        {
+            moveY = -1f;
+        }
+        else if(str =="Move_Left!")
+        {
+            moveX = -1f;
+        }
+        else if(str == "Move_Right!")
+        {
+            moveX = 1f;
+        }
+        else if (str=="Reset")
+        {
+            moveX = 0;
+            moveY = 0;
+        }
+    }
 }

@@ -23,6 +23,7 @@ public class TCPServeR : MonoBehaviour
     /// Create handle to connected tcp client. 	
     /// </summary> 	
     private TcpClient connectedTcpClient;
+    public string currentMessage = null;
   //  #endregion
 
     // Use this for initialization
@@ -50,8 +51,8 @@ public class TCPServeR : MonoBehaviour
     {
         try
         {
-            // Create listener on localhost port 8052. 			
-            tcpListener = new TcpListener(IPAddress.Parse("127.0.0.1"), 8052);
+            // Create listener on localhost port 10000 			
+            tcpListener = new TcpListener(IPAddress.Parse("127.0.0.1"), 10000);
             tcpListener.Start();
             Debug.Log("Server is listening");
             Byte[] bytes = new Byte[1024];
@@ -70,6 +71,7 @@ public class TCPServeR : MonoBehaviour
                             Array.Copy(bytes, 0, incommingData, 0, length);
                             // Convert byte array to string message. 							
                             string clientMessage = Encoding.ASCII.GetString(incommingData);
+                            currentMessage = clientMessage;
                             Debug.Log("client message received as: " + clientMessage);
                         }
                     }
@@ -79,6 +81,10 @@ public class TCPServeR : MonoBehaviour
         catch (SocketException socketException)
         {
             Debug.Log("SocketException " + socketException.ToString());
+        }
+        finally
+        {
+            Debug.Log("Player has disconnected");
         }
     }
     /// <summary> 	
@@ -109,5 +115,9 @@ public class TCPServeR : MonoBehaviour
         {
             Debug.Log("Socket exception: " + socketException);
         }
+    }
+    public string GetCurrentMessage()
+    {
+        return currentMessage;
     }
 }

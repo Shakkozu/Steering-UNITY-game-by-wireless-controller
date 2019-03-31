@@ -24,7 +24,7 @@ class cClient : public QObject
           char tab[100];
         };
     public slots:
-
+        bool connect2Server();
         void sendMessage(QString message);
         void SetData(QString ip, int port);
         //**
@@ -40,7 +40,7 @@ class cClient : public QObject
 
 
     private:
-        bool connect2Server();
+        //bool connect2Server();
         QTcpSocket m_socket;
         int m_port;
         int m_timerId;
