@@ -11,13 +11,25 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     connect(&client,SIGNAL(newMessageReceived(QString)),this,SLOT(newData(QString)));
     connect(ui->actionSettings,SIGNAL(triggered(bool)),this,SLOT(ShowDialog()));
+    timer = new QTimer(this);
+    connect(timer,SIGNAL(timeout()),this,SLOT(TimerEvent()));
+    timer->start(1000);
+   // timerID = startTimer(1000);
 }
 
 MainWindow::~MainWindow()
 {
+    client.Disconnect();
     delete ui;
-}
 
+}
+void MainWindow::TimerEvent()
+{
+    client.check();
+
+    //if(event->timerId()==timerID)
+
+}
 /*void MainWindow::on_sendButton_released()
 {
     QString str = ui->lineMsg->text();
@@ -49,7 +61,9 @@ void MainWindow::ShowDialog()
 
 void MainWindow::newData(QString text)
 {
-    ui->ChatText->addItem(text);
+    qDebug()<<"im here ant nothing happends";
+    //ui->ChatText->addItem(text);
+     ui->ChatText->addItem("Server: " + text);
 }
 
 /*void MainWindow::on_downloadButton_released()
@@ -126,4 +140,5 @@ void MainWindow::on_ConnectButton_clicked()
     {
         ui->ChatText->addItem("Connection Failed");
     }
+
 }

@@ -1,0 +1,13 @@
+1. Receive data from server to client and print in on text box
+UNDONE
+
+2.Change data send from client to server from string to float
+UNDONE
+
+3.Try to fix that game doesn't communicate properly in stanalone build
+(probably point 2 will fix it)
+UNDONE
+
+4.Work on timer to work properly + kill it
+
+UNDONE

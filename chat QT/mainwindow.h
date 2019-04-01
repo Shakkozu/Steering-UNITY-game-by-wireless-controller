@@ -12,19 +12,23 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+    int timerID;
 
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+
     ~MainWindow();
     cClient client;
    // SettingsDlg dialog;
 
-
+public slots:
+     void TimerEvent();
+      void newData(QString text);
 private slots:
    // void on_sendButton_released();
     void ShowDialog();
-    void newData(QString text);
+   // void newData(QString text);
 
   //void on_downloadButton_released();
     void on_ConnectButton_clicked();
@@ -44,8 +48,13 @@ private slots:
     void on_LeftButton_released();
 
 
+
 private:
     Ui::MainWindow *ui;
+    QTimer *timer;
+
+protected:
+
 };
 
 #endif // MAINWINDOW_H

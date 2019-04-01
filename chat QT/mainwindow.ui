@@ -98,7 +98,7 @@
    </property>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
-     <string>Okno Życia</string>
+     <string>Adress</string>
     </property>
     <addaction name="actionSettings"/>
    </widget>

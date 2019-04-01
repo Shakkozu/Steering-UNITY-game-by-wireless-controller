@@ -7,22 +7,27 @@
 #include <QString>
 #include <QDebug>
 #include <QTimerEvent>
+#include <QTimer>
+//#include "mainwindow.h"
 
 
 class cClient : public QObject
 {
     Q_OBJECT
+    int m_timerId;
     public:
     QString userName;
-        explicit cClient(QObject *parent = nullptr);
+        explicit cClient(QObject *parent = 0);
         int getMessagesCount();
-        QString getMessage(int id);
-        struct sDatagram
+        QString getMessage();
+
+        /*struct sDatagram
         {
           int cmdID;
           int val1;
           char tab[100];
         };
+        */
     public slots:
         bool connect2Server();
         void sendMessage(QString message);
@@ -43,10 +48,11 @@ class cClient : public QObject
         //bool connect2Server();
         QTcpSocket m_socket;
         int m_port;
-        int m_timerId;
+        //int m_timerId;
         QString m_IP;
         int recievedCounter;
         void SetUserName(QString str);
+protected:
         void TimerEvent(QTimerEvent *event);
 };
 
