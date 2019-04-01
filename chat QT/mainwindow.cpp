@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    cClient client;
     ui->setupUi(this);
     connect(&client,SIGNAL(newMessageReceived(QString)),this,SLOT(newData(QString)));
     connect(ui->actionSettings,SIGNAL(triggered(bool)),this,SLOT(ShowDialog()));
