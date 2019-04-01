@@ -1,5 +1,5 @@
 1. Receive data from server to client and print in on text box
-UNDONE
+DONE!!!
 
 2.Change data send from client to server from string to float
 UNDONE
@@ -9,5 +9,8 @@ UNDONE
 UNDONE
 
 4.Work on timer to work properly + kill it
-
 UNDONE
+
+5.Add info in unity when client connects & disconnects
+UNDONE
+

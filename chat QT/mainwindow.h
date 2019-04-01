@@ -24,7 +24,7 @@ public:
 
 public slots:
      void TimerEvent();
-      void newData(QString text);
+     void newData(QString text);
 private slots:
    // void on_sendButton_released();
     void ShowDialog();
@@ -53,7 +53,7 @@ private:
     Ui::MainWindow *ui;
     QTimer *timer;
 
-protected:
+
 
 };
 

@@ -14,12 +14,11 @@
 class cClient : public QObject
 {
     Q_OBJECT
-    int m_timerId;
     public:
+    int m_timerId;
     QString userName;
-        explicit cClient(QObject *parent = 0);
-        int getMessagesCount();
-        QString getMessage();
+    explicit cClient(QObject *parent = 0);
+
 
         /*struct sDatagram
         {
@@ -29,6 +28,8 @@ class cClient : public QObject
         };
         */
     public slots:
+        //int getMessagesCount();
+        QString getMessage();
         bool connect2Server();
         void sendMessage(QString message);
         void SetData(QString ip, int port);
@@ -39,10 +40,9 @@ class cClient : public QObject
         void Disconnect();
         void check();
 
-    signals:
-      //  void newMessageRecieved(QString);
-         void newMessageReceived(QString msg);
-
+     signals:
+         void newMessageReceived(QString txt);
+       // void newMessageRecieved(QString text);
 
     private:
         //bool connect2Server();

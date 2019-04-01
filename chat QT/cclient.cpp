@@ -8,7 +8,7 @@ cClient::cClient(QObject *parent) : QObject(parent),
    // QTimer *timer = new QTimer(this);
     //connect(timer,SIGNAL(timeout()),this,SLOT(check()));
    //timer->start(200);
-    m_timerId = startTimer(1000);
+    m_timerId = startTimer(10000);
 
 
 }
@@ -16,7 +16,8 @@ cClient::cClient(QObject *parent) : QObject(parent),
 void cClient::sendMessage(QString message) //in UTF8
 {
     QByteArray inBytes;
-         inBytes = message.toUtf8();
+    //inBytes.push_back(QByteArray::number(544));
+    inBytes = message.toUtf8();
          m_socket.write(inBytes.constData());
 
 
@@ -59,11 +60,12 @@ QString cClient::getMessage()
    // {
         while(!m_socket.atEnd())
         {
+            //qDebug() <<"im in loop" <<str;
             QByteArray data = m_socket.read(100);//m_socket.read(100);
 
-            QString  str = QString::fromUtf8(data);
-            //qDebug() <<str ;
-            return str;
+            str = QString::fromUtf8(data);
+
+           // return str;
         }
         return str;
        // return str;
@@ -107,14 +109,16 @@ QString cClient::getMessage()
 
 void cClient::check()
 {
+    QString msg = NULL;
     qDebug() <<"im in check";
     if(m_socket.waitForReadyRead(1000))
     {
         recievedCounter +=1;
-        QString msg = getMessage();
+        msg = getMessage();
         qDebug() <<"signal send with val: " <<msg;
         emit newMessageReceived(msg);
     }
+
     //int N = getMessagesCount();
   /*TODO REMOVE
    *   for(int id = recievedCounter+1; id<N; id++)

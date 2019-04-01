@@ -8,11 +8,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(&client,SIGNAL(newMessageReceived(QString)),this,SLOT(newData(QString)));
+
+    connect(&client,SIGNAL(newMessageReceived(QString)),this,SLOT(newData(QString)));// :(
+
     connect(ui->actionSettings,SIGNAL(triggered(bool)),this,SLOT(ShowDialog()));
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(TimerEvent()));
-    timer->start(1000);
+    timer->start(10000);
    // timerID = startTimer(1000);
 }
 
@@ -58,11 +60,11 @@ void MainWindow::ShowDialog()
     }
 }
 
-void MainWindow::newData(QString text)
+void MainWindow::newData(QString txt)
 {
     qDebug()<<"im here ant nothing happends";
     //ui->ChatText->addItem(text);
-     ui->ChatText->addItem("Server: " + text);
+     ui->ChatText->addItem("Server: " + txt);
 }
 
 /*void MainWindow::on_downloadButton_released()
@@ -72,10 +74,7 @@ void MainWindow::newData(QString text)
     ui->lineID->setText("");
 }*/
 
-
-
-
-
+//*****************buttons
 void MainWindow::on_UpButton_pressed()
 {
     QString str = "Move_Up!";
@@ -88,7 +87,6 @@ void MainWindow::on_RightButton_pressed()
     client.sendMessage(str);
 }
 
-
 void MainWindow::on_DownButton_pressed()
 {
     QString str = "Move_Down!";
@@ -100,21 +98,25 @@ void MainWindow::on_LeftButton_pressed()
     QString str = "Move_Left!";
     client.sendMessage(str);
 }
+
 void MainWindow::on_RightButton_released()
 {
     QString str = "Reset";
     client.sendMessage(str);
 }
+
 void MainWindow::on_DownButton_released()
 {
     QString str = "Reset";
     client.sendMessage(str);
 }
+
 void MainWindow::on_LeftButton_released()
 {
     QString str = "Reset";
     client.sendMessage(str);
 }
+
 void MainWindow::on_UpButton_released()
 {
     QString str = "Reset";
@@ -122,12 +124,12 @@ void MainWindow::on_UpButton_released()
    // client.sendMessage(str);
 }
 
-
 void MainWindow::on_DisconnectButton_clicked()
 {
     client.Disconnect();
     ui->ChatText->addItem("Disconnected From Server");
 }
+
 void MainWindow::on_ConnectButton_clicked()
 {
     if(client.connect2Server())
