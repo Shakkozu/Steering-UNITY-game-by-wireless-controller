@@ -9,13 +9,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(&client,SIGNAL(newMessageReceived(QString)),this,SLOT(newData(QString)));// :(
+    connect(&client,SIGNAL(newMessageReceived(QString)),this,SLOT(newData(QString)));
 
     connect(ui->actionSettings,SIGNAL(triggered(bool)),this,SLOT(ShowDialog()));
-    timer = new QTimer(this);
-    connect(timer,SIGNAL(timeout()),this,SLOT(TimerEvent()));
-    timer->start(10000);
-   // timerID = startTimer(1000);
 }
 
 MainWindow::~MainWindow()
@@ -24,26 +20,7 @@ MainWindow::~MainWindow()
     delete ui;
 
 }
-void MainWindow::TimerEvent()
-{
-    client.check();
 
-    //if(event->timerId()==timerID)
-
-}
-/*void MainWindow::on_sendButton_released()
-{
-    QString str = ui->lineMsg->text();
-    if(str == "\\total") // to check number of all messages send
-    {
-       ui->ChatText->addItem("Total number of messages send: " + QString::number(client.getMessagesCount()));
-    }
-    else
-    ui->ChatText->addItem(client.userName+":"+ui->lineMsg->text());
-    client.sendMessage(str);
-    ui->lineMsg->setText("");
-
-}*/
 void MainWindow::ShowDialog()
 {
     SettingsDlg dialog;
@@ -62,17 +39,9 @@ void MainWindow::ShowDialog()
 
 void MainWindow::newData(QString txt)
 {
-    qDebug()<<"im here ant nothing happends";
-    //ui->ChatText->addItem(text);
+
      ui->ChatText->addItem("Server: " + txt);
 }
-
-/*void MainWindow::on_downloadButton_released()
-{
-    int id = ui->lineID->text().toInt();
-    ui->ChatText->addItem("Server: "+client.getMessage(id));
-    ui->lineID->setText("");
-}*/
 
 //*****************buttons
 void MainWindow::on_UpButton_pressed()
@@ -121,7 +90,6 @@ void MainWindow::on_UpButton_released()
 {
     QString str = "Reset";
     client.sendMessage(str);
-   // client.sendMessage(str);
 }
 
 void MainWindow::on_DisconnectButton_clicked()

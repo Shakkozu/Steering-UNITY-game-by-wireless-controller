@@ -20,17 +20,12 @@ public:
 
     ~MainWindow();
     cClient client;
-   // SettingsDlg dialog;
-
 public slots:
-     void TimerEvent();
+
      void newData(QString text);
 private slots:
-   // void on_sendButton_released();
-    void ShowDialog();
-   // void newData(QString text);
 
-  //void on_downloadButton_released();
+    void ShowDialog();
     void on_ConnectButton_clicked();
     void on_DisconnectButton_clicked();
 
@@ -51,8 +46,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QTimer *timer;
-
 
 
 };
