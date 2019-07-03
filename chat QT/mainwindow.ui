@@ -15,14 +15,14 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="9" column="3">
+    <item row="12" column="4">
      <widget class="QPushButton" name="DisconnectButton">
       <property name="text">
        <string>Disconnect</string>
       </property>
      </widget>
     </item>
-    <item row="8" column="0" colspan="4">
+    <item row="11" column="1" colspan="4">
      <widget class="QListWidget" name="ChatText">
       <property name="enabled">
        <bool>true</bool>
@@ -35,27 +35,7 @@
       </property>
      </widget>
     </item>
-    <item row="5" column="1" colspan="2">
-     <widget class="QPushButton" name="DownButton">
-      <property name="text">
-       <string>Down</string>
-      </property>
-      <property name="shortcut">
-       <string>Down</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1" colspan="2">
-     <widget class="QPushButton" name="UpButton">
-      <property name="text">
-       <string>Up</string>
-      </property>
-      <property name="shortcut">
-       <string>Up</string>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="0">
+    <item row="12" column="1">
      <widget class="QPushButton" name="ConnectButton">
       <property name="text">
        <string>Connect</string>
@@ -65,25 +45,92 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0" colspan="2">
-     <widget class="QPushButton" name="LeftButton">
-      <property name="text">
-       <string>Left</string>
-      </property>
-      <property name="shortcut">
-       <string>Left</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="2" colspan="2">
-     <widget class="QPushButton" name="RightButton">
-      <property name="text">
-       <string>Right</string>
-      </property>
-      <property name="shortcut">
-       <string>Right</string>
-      </property>
-     </widget>
+    <item row="0" column="1" colspan="4">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="3" column="2">
+       <widget class="QPushButton" name="RightButton">
+        <property name="text">
+         <string>Right</string>
+        </property>
+        <property name="shortcut">
+         <string>Right</string>
+        </property>
+        <property name="checkable">
+         <bool>false</bool>
+        </property>
+        <property name="autoRepeat">
+         <bool>false</bool>
+        </property>
+        <property name="autoRepeatDelay">
+         <number>300</number>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QPushButton" name="DownButton">
+        <property name="text">
+         <string>Down</string>
+        </property>
+        <property name="shortcut">
+         <string>Down</string>
+        </property>
+        <property name="autoRepeat">
+         <bool>true</bool>
+        </property>
+        <property name="autoRepeatInterval">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QPushButton" name="ShootButton">
+        <property name="text">
+         <string>Shoot!</string>
+        </property>
+        <property name="shortcut">
+         <string>Space</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="LeftButton">
+        <property name="text">
+         <string>Left</string>
+        </property>
+        <property name="shortcut">
+         <string>Left</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="autoRepeat">
+         <bool>true</bool>
+        </property>
+        <property name="autoExclusive">
+         <bool>true</bool>
+        </property>
+        <property name="autoRepeatDelay">
+         <number>300</number>
+        </property>
+        <property name="autoRepeatInterval">
+         <number>100</number>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="UpButton">
+        <property name="text">
+         <string>Up</string>
+        </property>
+        <property name="shortcut">
+         <string>Up</string>
+        </property>
+        <property name="autoRepeat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

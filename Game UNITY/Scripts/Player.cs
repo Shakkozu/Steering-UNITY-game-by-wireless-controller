@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     float xMax;
     float yMin;
     float yMax;
+    bool shoot = false;
 
     float moveX = 0f, moveY = 0f;
     TCPServeR server;
@@ -45,7 +46,7 @@ public class Player : MonoBehaviour
     }
     private void Fire()
     {
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Fire1") || shoot)
         {
             GameObject laser = 
                 Instantiate(laserPrefab, transform.position, Quaternion.identity) 
@@ -53,6 +54,7 @@ public class Player : MonoBehaviour
             laser.GetComponent<Rigidbody2D>().velocity = new Vector2(0, projectileSpeed);
             //Quaternion.identity = no rotation
             Destroy(laser, 3f);
+            shoot = false;
         }
     }
 
@@ -99,7 +101,26 @@ public class Player : MonoBehaviour
         {
             moveX = 0;
             moveY = 0;
+            shoot = false;
         }
+        else if (str == "Shoot!")
+        {
+            shoot = true;
+            server.SetCurrentMessage("Reset");
+
+        }
+        else if (str == "Hello!")
+        {
+            Debug.Log("Player has connected!");
+            server.SetCurrentMessage("Reset");
+        }
+        else if (str == "Bye!")
+        {
+            Debug.Log("Player has disconnected!");
+            server.SetCurrentMessage("Reset");
+        }
+        // str = null;
+
     }
     
 }

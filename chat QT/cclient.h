@@ -8,7 +8,10 @@
 #include <QDebug>
 #include <QTimerEvent>
 #include <QTimer>
-
+#include <QTextCodec>
+#include <QDataStream>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 
 class cClient : public QObject
@@ -23,7 +26,10 @@ class cClient : public QObject
     public slots:
         QString getMessage();
         bool connect2Server();
+        bool CheckConnection();
         void sendMessage(QString message);
+        void sendMessage(QJsonObject package);
+        void sendMessage(QString str, double val);
         void SetData(QString ip, int port);
         //**
         QString GetIp();
@@ -32,18 +38,28 @@ class cClient : public QObject
         void Disconnect();
         void check();
 
+
      signals:
          void newMessageReceived(QString txt);
 
 
     private:
         QTcpSocket m_socket;
-        int m_port;
         QString m_IP;
-        int recievedCounter;
-        void SetUserName(QString str);
 
+        int m_port;
+        int recievedCounter;
+
+        struct sData
+        {
+            char str[30];
+            double val = 0;
+
+        };
+
+        void SetUserName(QString str);
         void createTimer();
+
 
 protected:
         void timerEvent(QTimerEvent *event);

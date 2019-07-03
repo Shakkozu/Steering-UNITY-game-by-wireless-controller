@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include "cclient.h"
 #include "settingsdlg.h"
+#include <QButtonGroup>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +23,7 @@ public:
 
     ~MainWindow();
     cClient client;
+    QButtonGroup group;
 public slots:
 
      void newData(QString text);
@@ -43,10 +47,31 @@ private slots:
     void on_LeftButton_released();
 
 
+    void AddButtonsToGroup();
+
+
+
+
+
+
+  //  void on_ShootButton_released();
+
+  //  void on_ShootButton_pressed();
+//
+    void on_ShootButton_clicked();
 
 private:
     Ui::MainWindow *ui;
-
+    QJsonObject package
+    {
+      {"Move_up",false},
+      {"Move_down",false},
+      {"Move_left",false},
+      {"Move_right",false},
+     { "Shoot",false},
+     { "Reset",false},
+     {"Message", "test"},
+    };
 
 };
 

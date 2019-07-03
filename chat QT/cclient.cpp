@@ -9,15 +9,72 @@ cClient::cClient(QObject *parent) : QObject(parent),
 
 }
 
-void cClient::sendMessage(QString message) //in UTF8
+void cClient::sendMessage(QString message)  // IN UTF8
 {
     QByteArray inBytes;
-    //inBytes.push_back(QByteArray::number(544));
-    inBytes = message.toUtf8();
-         m_socket.write(inBytes.constData());
+    inBytes.append(message.toUtf8());
+    m_socket.write(inBytes.constData());
+}
+
+//Test purposes
+void cClient::sendMessage(QJsonObject package)  // IN UTF8
+{
+
+    if(!package.isEmpty())
+    {
+    //creates a QJsonDocument from QJsonPackage
+    QJsonDocument doc(package);
+    QJsonDocument tst;
+    //Converts QJsonDoc to QByteArray
+     QByteArray inBytes = doc.toJson();
+
+
+    //inBytes = inBytes.constData();
+    qDebug() <<"inBytes: " << inBytes;
+    qDebug() <<"inBytes.constData(): " <<inBytes.constData();
+   // qDebug() <<"inBytes_constData: " << inBytes.constData();
+    m_socket.write(inBytes.constData());
+    //ZWRÓĆ UWAGĘ NA DANE WYSYŁANE (InBytes), i dojdź, jak przesłac je w formie inBytes.constData()
+    }
+}
+
+
+
+
+void cClient::sendMessage(QString str, double val) //in UTF8
+{
+
+   /*
+    *    sData temp;
+    temp.val = val;
+    strcpy(temp.str,qPrintable(str));
+    //temp.messageLength = str.length();
+
+     //double tab[5] = {2.32, 4.235, -865567.356346545, 52.234, 23.1208};
+    QByteArray buffor (reinterpret_cast<const char*>(&temp), sizeof(temp));
+
+*/
+val=4;
+     int strLen = str.length();
+      QByteArray buffor(reinterpret_cast<const char*>(&strLen), sizeof(int));
+     //int dataLen = buffor.size();
+     //reinterpret_cast<target_type>(expression)
+     //To send string,double,int, etc. To my QByteArray i need to convert it to byte type,
+     //so i cast it to 'const char*', and then i relate to it's memory.
+
+     //As first i will send to my buffor length of the string, that comes right after strLen
+
+     //QByteArray buffor(reinterpret_cast<const char*>(&dataLen), sizeof(int));
+     buffor.append(str.toUtf8());
+
+     qDebug() <<str;
+     qDebug() <<"rozmiar  ramki:  " <<buffor.size();
+     m_socket.write(buffor.constData());
+   //  m_socket.write((char*)&temp,sizeof(temp));
 
 
 }
+
 
 void cClient::SetData(QString ip, int port)
 {
@@ -70,6 +127,14 @@ bool cClient::connect2Server() //if connection has failed returns FALSE, else TR
        }
        return true;
     }
+    else return false;
+}
+
+bool cClient::CheckConnection()
+{
+    if(m_socket.waitForConnected())
+        return true;
+
     else return false;
 }
 

@@ -1,14 +1,33 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using UnityEngine;
+using Newtonsoft.Json;
+
+
+
+public class Package
+{
+
+    public bool Move_up { get; set; }
+    public bool Move_down { get; set; }
+    public bool Move_right { get; set; }
+    public bool Move_left { get; set; }
+    public bool Shoot { get; set; }
+    public bool Reset { get; set; }
+    public string Message { get; set; }
+
+  
+}
 
 public class TCPServeR : MonoBehaviour
 {
+
+
+
+    Package package = new Package();
   //  #region private members 	
     /// <summary> 	
     /// TCPListener to listen for incomming TCP connection 	
@@ -24,8 +43,8 @@ public class TCPServeR : MonoBehaviour
     /// </summary> 	
     private TcpClient connectedTcpClient;
     public string currentMessage = null;
-  //  #endregion
-
+    //  #endregion
+    public double[] doubleArray = new double[10];
     // Use this for initialization
     void Start()
     {
@@ -44,6 +63,7 @@ public class TCPServeR : MonoBehaviour
         }
     }
 
+   
     /// <summary> 	
     /// Runs in background TcpServerThread; Handles incomming TcpClient requests 	
     /// </summary> 	
@@ -59,25 +79,37 @@ public class TCPServeR : MonoBehaviour
             while (true)
             {
                 using (connectedTcpClient = tcpListener.AcceptTcpClient())
-                {
+                
                     // Get a stream object for reading 					
                     using (NetworkStream stream = connectedTcpClient.GetStream())
+                     {
+                    int length = 0;
+                    while ((length = stream.Read(bytes, 0, bytes.Length)) != 0)
                     {
-                        int length;
-                        // Read incomming stream into byte arrary. 						
-                        while ((length = stream.Read(bytes, 0, bytes.Length)) != 0)
-                        {
-                            var incommingData = new byte[length];
-                            Array.Copy(bytes, 0, incommingData, 0, length);
-                            // Convert byte array to string message. 							
-                            string clientMessage = Encoding.ASCII.GetString(incommingData);
-                            currentMessage = clientMessage;
-                            Debug.Log("client message received as: " + clientMessage);
-                        }
+
+                        //array to store data from buffer
+                        byte[] incommingData = new byte[2048];
+                        Array.Copy(bytes, 0, incommingData, 0, length);
+
+                        //decode received message to ASCII
+                        string clientMessage = Encoding.ASCII.GetString(incommingData);
+                       
+                        //Convert received string to Package type (JSON FORMAT), now i can refer to it's attributes
+                        Package deserializedPackage = JsonConvert.DeserializeObject<Package>(clientMessage);
+
+                        deserializedPackage.Message = bytes[1].ToString();
+                        //If i would like to print Json format, i need to Serialize it.
+                        Debug.Log(JsonConvert.SerializeObject(deserializedPackage));
+
+
+
+
                     }
                 }
+                }
+                
             }
-        }
+        
         catch (SocketException socketException)
         {
             Debug.Log("SocketException " + socketException.ToString());
@@ -119,5 +151,9 @@ public class TCPServeR : MonoBehaviour
     public string GetCurrentMessage()
     {
         return currentMessage;
+    }
+    public void SetCurrentMessage(string message)
+    {
+        currentMessage = message;
     }
 }
