@@ -9,9 +9,18 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(&client,SIGNAL(newMessageReceived(QString)),this,SLOT(newData(QString)));
+   // connect(&client,SIGNAL(newMessageReceived(QString)),this,SLOT(newData(QString)));
+    connect(&client,SIGNAL(ConnectionFailed()),this,SLOT(RenewConnection()));
+
 
     connect(ui->actionSettings,SIGNAL(triggered(bool)),this,SLOT(ShowDialog()));
+
+    AddButtonsToGroup();
+    connect(&group, static_cast<void(QButtonGroup::*)(QAbstractButton *)>(&QButtonGroup::buttonReleased),
+            [=](QAbstractButton *button) {
+        package["Reset"] = true;
+        client.sendMessage(package);
+    });
 
 }
 
@@ -23,10 +32,20 @@ MainWindow::~MainWindow()
 }
 void MainWindow::AddButtonsToGroup()
 {
-    group.addButton(ui->ConnectButton);
-    group.addButton(ui->DownButton,1);
-    group.addButton(ui->LeftButton,2);
-    group.addButton(ui->UpButton,3);
+    group.addButton(ui->DownButton);
+    group.addButton(ui->LeftButton);
+    group.addButton(ui->RightButton);
+    group.addButton(ui->UpButton);
+}
+
+
+void MainWindow::ReleaseSteeringButton()
+{
+    package["Reset"]=true;
+    package["Message"]="Reset!";
+    client.sendMessage(package);
+    resetPackage();
+
 }
 void MainWindow::ShowDialog()
 {
@@ -44,10 +63,32 @@ void MainWindow::ShowDialog()
     }
 }
 
+void MainWindow::RenewConnection()
+{
+    bool isConnected=false;
+    while(!isConnected)
+    {
+    ui->ChatText->addItem("Connection Lost, trying to renew the connection!");
+   isConnected = client.connect2Server();
+    Sleep(100);
+    }
+}
 void MainWindow::newData(QString txt)
 {
 
      ui->ChatText->addItem("Server: " + txt);
+}
+
+void MainWindow::resetPackage()
+{
+    package["Move_up"] = false;
+    package["Move_down"]=false;
+    package["Move_left"] = false;
+    package["Move_right"]=false;
+    package["Shoot"] = false;
+    package["Reset"]=false;
+    package["Message"]="";
+
 }
 
 //*****************buttons
@@ -60,64 +101,57 @@ void MainWindow::newData(QString txt)
 void MainWindow::on_UpButton_pressed()
 {
     package["Move_up"]=true;
+    package["Reset"]=false;
+    package["Message"]="ruszylem sie w gore";
     client.sendMessage(package);
+    resetPackage();
+
 }
 
 void MainWindow::on_RightButton_pressed()
 {
 
-    QString str = "Move_Right!";
-    client.sendMessage(str);
+    //QString str = "Move_Right!";
+    package["Move_right"] = true;
+    package["Reset"]=false;
+    package["Message"]="ruszylem sie w prawo";
+    client.sendMessage(package);
+    resetPackage();
+
 }
 
 void MainWindow::on_DownButton_pressed()
 {
-    QString str = "Move_Down!";
-    client.sendMessage(str);
+    package["Move_down"]=true;
+    package["Reset"]=false;
+     package["Message"]="ruszylem sie w dol";
+    client.sendMessage(package);
+    resetPackage();
+
 }
 
 void MainWindow::on_LeftButton_pressed()
 {
-    QString str = "Move_Left!";
-
-    client.sendMessage(str,2.0);
-}
-
-void MainWindow::on_RightButton_released()
-{
-    //client.sData.message = "Reset";
-    //client.sData.val = 1;
-    QString str = "Reset";
-    double val = 0.5;
-    client.sendMessage(str,val);
-}
-
-void MainWindow::on_DownButton_released()
-{
-    QString str = "Reset";
-    client.sendMessage(str);
-}
-
-void MainWindow::on_LeftButton_released()
-{
-    QString str = "Reset";
-   // client.sendMessage(str);
-    client.sendMessage(str,8.0);
-}
-
-void MainWindow::on_UpButton_released()
-{
-    QString str = "Reset";
-   // client.sendMessage(str);
+    package["Move_left"]=true;
+    package["Reset"]=false;
+     package["Message"]="ruszylem sie w lewo";
+    client.sendMessage(package);
+    resetPackage();
 
 }
+
+
+
 
 void MainWindow::on_DisconnectButton_clicked()
 {
     if(client.CheckConnection())
     {
-        client.sendMessage("Bye!");
+
+        package["Message"]="Bye!";
+        client.sendMessage(package);
         client.Disconnect();
+
         ui->ChatText->addItem("Disconnected From Server");
     }
     else ui->ChatText->addItem("Connection wasn't established, can't disconnect");
@@ -129,12 +163,17 @@ void MainWindow::on_ConnectButton_clicked()
 {
     if(client.connect2Server())
     {
+        package["Message"]="Hello";
+        client.sendMessage(package);
+        resetPackage();
+       // client.sendMessage("Hello");
         ui->ChatText->addItem("Connected to server  IP:"
             + client.GetIp()+" PORT:" +QString::number(client.GetPort()));
        // client.sendMessage("Hello!");
     }
     else
     {
+
         ui->ChatText->addItem("Connection Failed");
     }
 
@@ -143,5 +182,6 @@ void MainWindow::on_ConnectButton_clicked()
 
 void MainWindow::on_ShootButton_clicked()
 {
-    client.sendMessage("Shoot!");
+    package["Shoot"]=true;
+    client.sendMessage(package);
 }

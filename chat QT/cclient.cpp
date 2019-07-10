@@ -16,7 +16,7 @@ void cClient::sendMessage(QString message)  // IN UTF8
     m_socket.write(inBytes.constData());
 }
 
-//Test purposes
+
 void cClient::sendMessage(QJsonObject package)  // IN UTF8
 {
 
@@ -24,58 +24,20 @@ void cClient::sendMessage(QJsonObject package)  // IN UTF8
     {
     //creates a QJsonDocument from QJsonPackage
     QJsonDocument doc(package);
-    QJsonDocument tst;
     //Converts QJsonDoc to QByteArray
      QByteArray inBytes = doc.toJson();
 
-
-    //inBytes = inBytes.constData();
-    qDebug() <<"inBytes: " << inBytes;
-    qDebug() <<"inBytes.constData(): " <<inBytes.constData();
-   // qDebug() <<"inBytes_constData: " << inBytes.constData();
     m_socket.write(inBytes.constData());
-    //ZWRÓĆ UWAGĘ NA DANE WYSYŁANE (InBytes), i dojdź, jak przesłac je w formie inBytes.constData()
+    // i added this delay to improve data transferring, and avoid loosing too many packets, i hope that it would
+    //not slow down the connection
+    this->thread()->usleep(200);
+
     }
 }
 
 
 
-
-void cClient::sendMessage(QString str, double val) //in UTF8
-{
-
-   /*
-    *    sData temp;
-    temp.val = val;
-    strcpy(temp.str,qPrintable(str));
-    //temp.messageLength = str.length();
-
-     //double tab[5] = {2.32, 4.235, -865567.356346545, 52.234, 23.1208};
-    QByteArray buffor (reinterpret_cast<const char*>(&temp), sizeof(temp));
-
-*/
-val=4;
-     int strLen = str.length();
-      QByteArray buffor(reinterpret_cast<const char*>(&strLen), sizeof(int));
-     //int dataLen = buffor.size();
-     //reinterpret_cast<target_type>(expression)
-     //To send string,double,int, etc. To my QByteArray i need to convert it to byte type,
-     //so i cast it to 'const char*', and then i relate to it's memory.
-
-     //As first i will send to my buffor length of the string, that comes right after strLen
-
-     //QByteArray buffor(reinterpret_cast<const char*>(&dataLen), sizeof(int));
-     buffor.append(str.toUtf8());
-
-     qDebug() <<str;
-     qDebug() <<"rozmiar  ramki:  " <<buffor.size();
-     m_socket.write(buffor.constData());
-   //  m_socket.write((char*)&temp,sizeof(temp));
-
-
-}
-
-
+//Function sets connection's data, port and server IP
 void cClient::SetData(QString ip, int port)
 {
     m_port = port;
@@ -83,7 +45,7 @@ void cClient::SetData(QString ip, int port)
 }
 
 
-
+//Handling getting message by server
 QString cClient::getMessage()
 {
     QString  str = NULL;
@@ -98,6 +60,7 @@ QString cClient::getMessage()
         return str;
 }
 
+//
 void cClient::check()
 {
     QString msg = NULL;
@@ -132,10 +95,12 @@ bool cClient::connect2Server() //if connection has failed returns FALSE, else TR
 
 bool cClient::CheckConnection()
 {
-    if(m_socket.waitForConnected())
+    if(m_socket.waitForConnected(100))
         return true;
 
-    else return false;
+    else
+        return false;
+
 }
 
 QString cClient::GetIp()
@@ -160,7 +125,7 @@ void cClient::SetUserName(QString str)
 
 void cClient::createTimer()
 {
-    m_timerId = startTimer(150);
+    m_timerId = startTimer(120);
 }
 
 void cClient::timerEvent(QTimerEvent *event)
@@ -168,7 +133,9 @@ void cClient::timerEvent(QTimerEvent *event)
 
    if(event->timerId()==m_timerId)
    {
-       check();
+       if(!CheckConnection())
+           emit ConnectionFailed();
+
     }
 
 }

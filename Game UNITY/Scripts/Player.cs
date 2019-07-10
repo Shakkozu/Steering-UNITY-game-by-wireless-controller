@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
 
     float moveX = 0f, moveY = 0f;
     TCPServeR server;
+    Package playerPackage = new Package();
+    
 
     // Start is called before the first frame update
     void Start()
@@ -79,48 +81,52 @@ public class Player : MonoBehaviour
     }
     private void AddMoveInitiators()
     {
-        string str = server.GetCurrentMessage();
+        playerPackage = server.GetCurrentMessage();
         //Debug.Log(str);
-        if(str == "Move_Up!")
+        if(playerPackage.Move_up)
         {
             moveY = 1f;
         }
-        else if(str =="Move_Down!")
+        if(playerPackage.Move_down)
         {
             moveY = -1f;
         }
-        else if(str =="Move_Left!")
+        if(playerPackage.Move_left)
         {
             moveX = -1f;
         }
-        else if(str == "Move_Right!")
+        if(playerPackage.Move_right)
         {
             moveX = 1f;
         }
-        else if (str=="Reset")
+        if (playerPackage.Reset)
         {
             moveX = 0;
             moveY = 0;
             shoot = false;
         }
-        else if (str == "Shoot!")
+        if (playerPackage.Shoot)
         {
             shoot = true;
-            server.SetCurrentMessage("Reset");
+           
+            playerPackage.Shoot = false;
 
         }
-        else if (str == "Hello!")
+        if (playerPackage.Message == "Hello")
         {
             Debug.Log("Player has connected!");
-            server.SetCurrentMessage("Reset");
+            playerPackage.Message = "";
         }
-        else if (str == "Bye!")
+        if (playerPackage.Message == "Bye!")
         {
             Debug.Log("Player has disconnected!");
-            server.SetCurrentMessage("Reset");
+            playerPackage.Message = "";
         }
-        // str = null;
-
+       
     }
-    
+
+
+    ///
+   
+
 }

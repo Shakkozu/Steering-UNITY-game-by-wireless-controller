@@ -34,31 +34,18 @@ private slots:
     void on_DisconnectButton_clicked();
 
 
-    void on_UpButton_released();
     void on_UpButton_pressed();
-
     void on_RightButton_pressed();
-    void on_RightButton_released();
-
     void on_DownButton_pressed();
-    void on_DownButton_released();
-
     void on_LeftButton_pressed();
-    void on_LeftButton_released();
 
-
+    void resetPackage();
+    void RenewConnection();
     void AddButtonsToGroup();
 
 
-
-
-
-
-  //  void on_ShootButton_released();
-
-  //  void on_ShootButton_pressed();
-//
     void on_ShootButton_clicked();
+    void ReleaseSteeringButton();
 
 private:
     Ui::MainWindow *ui;

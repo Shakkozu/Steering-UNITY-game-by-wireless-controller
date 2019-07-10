@@ -28,7 +28,36 @@ UNDONE!!!
 8. Change data send type to JSON
 DONE!!
 
+@@PLANS CHANGED
 9.Add timer, that will check connection every timestep
+Send data from server to client, and wait for response+
+COMMENT:There is no need to do this, on the server side i can
+check, when Stream is closed (leaveing 'using' statement), and that means that i lost my connection (That results from socket connection definition)
+
+
+10. Work at data flow (remove bugs if data received too fast)
+DONE!!
+COMMENT: Added try/catch to serve this, regrettably packets that came too fast was deleted. I will come back to it if necceseary when Myo will be connected
+
+11. Updated steering game obejct, by JSON format
+DONE!!
+
+12.Connect to MYO band
+UNDONE
+
+13.Work and get familiar with data send by MYO
+UNDONE
+
+14.Replace QT app with MYO Band
 UNDONE!!
 
+15.DEBUG AND REFACTORIZE YOUR CODE
+UNDONE!!
 
+(Optional) 16.Write some tests
+UNDONE!!
+
+(Optional) 17. Think about sending data from Myo to web server, 
+to get live review 
+http://diagnostics.myo.com
+UNDONE

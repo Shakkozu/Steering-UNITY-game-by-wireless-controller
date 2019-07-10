@@ -24,28 +24,22 @@ public class Package
 
 public class TCPServeR : MonoBehaviour
 {
+    //  < private members >
 
-
-
-    Package package = new Package();
-  //  #region private members 	
-    /// <summary> 	
-    /// TCPListener to listen for incomming TCP connection 	
-    /// requests. 	
-    /// </summary> 	
+    //JSON format package that keeps information about current move,status,etc.
+    Package serverPackage = new Package();
+    // TCPListener to listen for incomming TCP connection 	
+    // requests. 	
     private TcpListener tcpListener;
-    /// <summary> 
-    /// Background thread for TcpServer workload. 	
-    /// </summary> 	
-    private Thread tcpListenerThread;
-    /// <summary> 	
-    /// Create handle to connected tcp client. 	
-    /// </summary> 	
+    // Background thread for TcpServer workload. 	
+    private Thread tcpListenerThread;	
+    // Create handle to connected tcp client. 	
     private TcpClient connectedTcpClient;
-    public string currentMessage = null;
-    //  #endregion
-    public double[] doubleArray = new double[10];
-    // Use this for initialization
+    //
+    int length = 0;
+     
+
+    //#Functions (UNITY)
     void Start()
     {
         // Start TcpServer background thread 		
@@ -62,50 +56,55 @@ public class TCPServeR : MonoBehaviour
             SendMessage();
         }
     }
-
+    //<Class Functions>
    
-    /// <summary> 	
-    /// Runs in background TcpServerThread; Handles incomming TcpClient requests 	
-    /// </summary> 	
+    // Runs in background TcpServerThread; Handles incomming TcpClient requests 	
     private void ListenForIncommingRequests()
     {
         try
         {
-            // Create listener on localhost port 10000 			
+            // Create listener on localhost port 10000 		
             tcpListener = new TcpListener(IPAddress.Parse("127.0.0.1"), 10000);
             tcpListener.Start();
             Debug.Log("Server is listening");
-            Byte[] bytes = new Byte[1024];
+            Byte[] bytes = new Byte[512];
             while (true)
             {
+                //Accept connection requests
                 using (connectedTcpClient = tcpListener.AcceptTcpClient())
-                
                     // Get a stream object for reading 					
                     using (NetworkStream stream = connectedTcpClient.GetStream())
                      {
-                    int length = 0;
-                    while ((length = stream.Read(bytes, 0, bytes.Length)) != 0)
-                    {
+                    
+                        while ((length = stream.Read(bytes, 0, bytes.Length)) != 0)
+                        {
 
-                        //array to store data from buffer
-                        byte[] incommingData = new byte[2048];
-                        Array.Copy(bytes, 0, incommingData, 0, length);
+                            //array to store data from buffer
+                            byte[] incommingData = new byte[512];
+                            Array.Copy(bytes, 0, incommingData, 0, length);
 
-                        //decode received message to ASCII
-                        string clientMessage = Encoding.ASCII.GetString(incommingData);
+                            //decode received message to ASCII
+                            string clientMessage = Encoding.ASCII.GetString(incommingData);
+
+                            //Convert received string to Package type (JSON FORMAT), now i can refer to it's attributes
+                            try
+                            {
+                                Package deserializedPackage = JsonConvert.DeserializeObject<Package>(clientMessage);
+                                serverPackage = deserializedPackage;
+                                //I need to serialize Json format to print it as string
+                                Debug.Log(JsonConvert.SerializeObject(deserializedPackage));
+                            }
+                            catch
+                            {
+                                Debug.Log("Utracono informacje!");
+                                byte[] tmp = new byte[512];
+                                incommingData.Equals(tmp);
+                            }
                        
-                        //Convert received string to Package type (JSON FORMAT), now i can refer to it's attributes
-                        Package deserializedPackage = JsonConvert.DeserializeObject<Package>(clientMessage);
-
-                        deserializedPackage.Message = bytes[1].ToString();
-                        //If i would like to print Json format, i need to Serialize it.
-                        Debug.Log(JsonConvert.SerializeObject(deserializedPackage));
-
-
-
-
-                    }
+                        }
                 }
+                //Exiting using statement brackets means that connection was lost, (stream closed)
+                Debug.Log("Connection Lost!");
                 }
                 
             }
@@ -122,6 +121,39 @@ public class TCPServeR : MonoBehaviour
     /// <summary> 	
     /// Send message to client using socket connection. 	
     /// </summary> 	
+    ///
+   /* TO REFACTORIZE
+    * 
+    * private Package DecodePackage(string message)
+    {
+        return JsonConvert.DeserializeObject<Package>(message);
+    }
+    private string CodePackage(Package pack)
+    {
+        return JsonConvert.SerializeObject(pack);
+    }
+    private void RetreiveMessage(ref NetworkStream stream, ref int length, ref Byte[] bytes)
+    {
+        byte[] incommingData = new byte[512];
+        Array.Copy(bytes, 0, incommingData, 0, length);
+
+        //decode received message to ASCII
+        string clientMessage = Encoding.ASCII.GetString(incommingData);
+
+        //Convert received string to Package type (JSON FORMAT), now i can refer to it's attributes
+        try
+        {
+            serverPackage = DecodePackage(clientMessage);
+
+            //I need to serialize Json format to print it as string
+            Debug.Log(CodePackage(serverPackage));
+        }
+        catch
+        {
+            Debug.Log("Utracono informacje!");
+        }
+    }
+    */
     private void SendMessage()
     {
         if (connectedTcpClient == null)
@@ -148,12 +180,9 @@ public class TCPServeR : MonoBehaviour
             Debug.Log("Socket exception: " + socketException);
         }
     }
-    public string GetCurrentMessage()
+    public Package GetCurrentMessage()
     {
-        return currentMessage;
+        return serverPackage;
     }
-    public void SetCurrentMessage(string message)
-    {
-        currentMessage = message;
-    }
+    
 }

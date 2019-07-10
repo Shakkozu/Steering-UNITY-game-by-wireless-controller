@@ -12,6 +12,8 @@
 #include <QDataStream>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <Windows.h>
+#include <QThread>
 
 
 class cClient : public QObject
@@ -29,7 +31,6 @@ class cClient : public QObject
         bool CheckConnection();
         void sendMessage(QString message);
         void sendMessage(QJsonObject package);
-        void sendMessage(QString str, double val);
         void SetData(QString ip, int port);
         //**
         QString GetIp();
@@ -41,6 +42,7 @@ class cClient : public QObject
 
      signals:
          void newMessageReceived(QString txt);
+         void ConnectionFailed();
 
 
     private:
@@ -50,12 +52,6 @@ class cClient : public QObject
         int m_port;
         int recievedCounter;
 
-        struct sData
-        {
-            char str[30];
-            double val = 0;
-
-        };
 
         void SetUserName(QString str);
         void createTimer();
