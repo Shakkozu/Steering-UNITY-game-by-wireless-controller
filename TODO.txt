@@ -42,13 +42,13 @@ COMMENT: Added try/catch to serve this, regrettably packets that came too fast w
 11. Updated steering game obejct, by JSON format
 DONE!!
 
-12.Connect to MYO band
+12.Connect to MYO band by QT (Bluetooth)
 UNDONE
 
 13.Work and get familiar with data send by MYO
 UNDONE
 
-14.Replace QT app with MYO Band
+14.Connect to TCP/IP Socket with QT app, that is connected to MYO band
 UNDONE!!
 
 15.DEBUG AND REFACTORIZE YOUR CODE
