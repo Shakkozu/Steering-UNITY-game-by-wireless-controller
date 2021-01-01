@@ -1,7 +1,4 @@
 # Steering-UNITY-game-by-wireless-controller
-First big project
-
-Hello!
 
 Concept of this project is to create  connection between Unity instantion and Myo armband, and use it to control
 Unity game object. 
